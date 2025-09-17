@@ -1,0 +1,20 @@
+package api
+
+import "github.com/labstack/echo/v4"
+
+func wrapperHandler(c echo.Context) error {
+	if c.Request().Method == "GET" {
+	}
+	return c.String(200, c.Request().URL.Path)
+}
+
+func RegisterGroupRoutes(g *echo.Group) {
+	g.GET("*", wrapperHandler)
+	//g.GET("/item/addFromURL", handleAddItemFromUrl)
+}
+
+func RegisterRootRoutes(server *echo.Echo) {
+	server.GET("/http\\:*", func(c echo.Context) error {
+		return c.String(200, c.Request().URL.Path)
+	})
+}
