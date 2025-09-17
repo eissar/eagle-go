@@ -1,4 +1,4 @@
-package api // Same package as the source file
+package eagle // Same package as the source file
 
 import (
 	"fmt"

@@ -1,4 +1,4 @@
-package api
+package eagle
 
 // - [X] /api/folder/create
 // - [X] /api/folder/rename
