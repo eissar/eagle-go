@@ -10,7 +10,6 @@ import (
 	"strings"
 
 	"github.com/eissar/eagle-go/endpoints"
-	"github.com/spf13/cobra"
 )
 
 // #region types
@@ -87,12 +86,6 @@ type LibraryInfoResponse struct {
 //- [X] /api/library/history
 //- [X] /api/library/switch
 //- [-] /api/library/icon
-
-func addLibFlags(cmd *cobra.Command, libraryPath *string) *cobra.Command {
-	if libraryPath != nil {
-	}
-	return cmd
-}
 
 func LibraryInfo(baseURL string) (*LibraryData, error) {
 	ep := endpoints.LibraryInfo
