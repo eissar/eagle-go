@@ -69,8 +69,8 @@ type ListItem struct {
 	URL              string `json:"url"`
 	Annotation       string `json:"annotation"`
 	ModificationTime int64  `json:"modificationTime"`
-	// height
-	// width
+	Width            int    `json:"width"`
+	Height           int    `json:"height"`
 	// lastModified
 	// palettes
 	Website string `json:"website"`
