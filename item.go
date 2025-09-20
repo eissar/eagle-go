@@ -161,7 +161,7 @@ type BulkItem struct {
 
 type ItemListOptions struct {
 	Limit   int    `json:"limit" flag:"The number of items to be displayed. the default number is 200"`
-	Offset  int    `json:"offset,omitempty" flag:"Offset a collection of results from the api. Start with 0."`
+	Offset  int    `json:"offset,omitempty" flag:"Offset a collection of results from the API. Start at 0. An offset of 1 returns items beginning after limit × offset."`
 	OrderBy string `json:"orderBy,omitempty" flag:"The sorting order. CREATEDATE , FILESIZE , NAME , RESOLUTION , add a minus sign for descending order: -FILESIZE"`
 	Keyword string `json:"keyword,omitempty" flag:"Filter by the keyword"`
 	Ext     string `json:"ext,omitempty" flag:"Filter by the extension type, e.g.: jpg ,  png"`
