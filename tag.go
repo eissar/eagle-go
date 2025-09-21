@@ -13,7 +13,7 @@ type TagItem struct {
 	Pinyin     string   `json:"pinyin"`
 }
 
-// not implemented
+// not implemented (this just gets data.tags, data.recent, data.groups
 func TagAll(baseUrl string) {
 	// ep := endpoints.TagAll
 	// uri := baseUrl + ep.Path
@@ -24,7 +24,7 @@ func TagAll(baseUrl string) {
 }
 
 func TagList(baseUrl string) ([]*TagItem, error) {
-	ep := endpoints.TagAll
+	ep := endpoints.TagList
 	uri := baseUrl + ep.Path
 
 	// no params
@@ -45,10 +45,51 @@ func TagList(baseUrl string) ([]*TagItem, error) {
 	return resp.Data, nil
 }
 
-// not implemented
-func TagGroups(baseUrl string) {
+// id        : MFUAWYUQRHY2G
+// name      : test
+// tags      : {}
+// editable  : False
+// $$hashKey : object:32256
+
+func TagGroups(baseUrl string) ([]*TagsGroup, error) {
+	ep := endpoints.TagGroups
+	uri := baseUrl + ep.Path
+
+	// no param
+	var resp struct {
+		EagleResponse
+		Data []*TagsGroup `json:"data"`
+	}
+
+	err := Request(ep.Method, uri, nil, nil, &resp)
+	if err != nil {
+		return nil, fmt.Errorf("groups: err=%s", err)
+	}
+	if resp.Status != "success" {
+		return nil, fmt.Errorf("groups: err=%s", err)
+	}
+
+	return resp.Data, nil
 }
 
-// not implemented
-func TagListRecent(baseUrl string) {
+func TagListRecent(baseUrl string) ([]*TagItem, error) {
+	ep := endpoints.TagListRecent
+	uri := baseUrl + ep.Path
+
+	// no params
+	var resp struct {
+		EagleResponse
+		Data []*TagItem `json:"data"`
+	}
+
+	err := Request(ep.Method, uri, nil, nil, &resp)
+	if err != nil {
+		return nil, fmt.Errorf("list: err=%w", err)
+	}
+
+	if resp.Status != "success" {
+		return nil, fmt.Errorf("list: err=%w", ErrStatusErr)
+	}
+
+	return resp.Data, nil
 }

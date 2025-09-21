@@ -118,15 +118,19 @@ var (
 // Tag Endpoints
 var (
 	TagAll = Endpoint{
-		Path: "/api/tag/all",
+		Path:   "/api/tag/all",
+		Method: "GET",
 	}
 	TagList = Endpoint{
-		Path: "/api/tag/list",
+		Path:   "/api/tag/list",
+		Method: "GET",
 	}
 	TagGroups = Endpoint{
-		Path: "/api/tag/groups",
+		Path:   "/api/tag/groups",
+		Method: "GET",
 	}
 	TagListRecent = Endpoint{
-		Path: "/api/tag/listRecent",
+		Path:   "/api/tag/listRecent",
+		Method: "GET",
 	}
 )

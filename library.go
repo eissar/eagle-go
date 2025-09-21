@@ -68,10 +68,12 @@ type QuickAccess struct {
 	ID   string `json:"id"`
 }
 type TagsGroup struct {
-	ID    string   `json:"id"`
-	Name  string   `json:"name"`
-	Tags  []string `json:"tags"`
-	Color string   `json:"color,omitempty"`
+	ID       string   `json:"id"`
+	Name     string   `json:"name"`
+	Tags     []string `json:"tags"`
+	Editable bool     `json:"editable,omitempty"`
+	// HashKey  string   `json:"$$hashKey,omitempty"` // $$hashKey : object:32256  what is this?
+	Color string `json:"color,omitempty"`
 }
 type LibraryInfoResponse struct {
 	Data   LibraryData `json:"data"`
