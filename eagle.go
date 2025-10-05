@@ -18,12 +18,9 @@ import (
 	"syscall"
 
 	"github.com/eissar/eagle-go/endpoints"
-	"golang.org/x/sys/windows"
 )
 
-var (
-	ErrStatusErr = fmt.Errorf("response key 'status' was not 'success'")
-)
+var ErrStatusErr = fmt.Errorf("response key 'status' was not 'success'")
 
 // #region errors
 
@@ -38,8 +35,10 @@ func (e *EagleApiErr) Error() string {
 }
 
 // sentinel errors
-var LibraryIsAlreadyTargetErr = errors.New("Library is already active")
-var EagleNotOpenOrUnavailableErr = fmt.Errorf("Eagle is not open or unavailable.")
+var (
+	LibraryIsAlreadyTargetErr    = errors.New("Library is already active")
+	EagleNotOpenOrUnavailableErr = fmt.Errorf("Eagle is not open or unavailable.")
+)
 
 // constructor
 func GetCurrentLibraryIsAlreadyTargetError(currLib string) error {
@@ -48,7 +47,7 @@ func GetCurrentLibraryIsAlreadyTargetError(currLib string) error {
 
 func IsEagleNotOpenOrUnavailableError(err error) bool {
 	// windows, linux
-	if errors.Is(err, windows.WSAECONNREFUSED) || errors.Is(err, syscall.ECONNREFUSED) {
+	if errors.Is(err, syscall.ECONNREFUSED) {
 		return true
 	}
 	return false
@@ -185,10 +184,8 @@ func invokeEagleAPI[T any](req *http.Request, v *T) error {
 	// make the request
 	client := &http.Client{}
 	resp, err := client.Do(req)
-
 	// fmt.Printf("resp.StatusCode: %v\n", resp.StatusCode)
 	// fmt.Printf("req.URL: %v\n", req.URL)
-
 	if err != nil {
 		if IsEagleNotOpenOrUnavailableError(err) {
 			return EagleNotOpenOrUnavailableErr
