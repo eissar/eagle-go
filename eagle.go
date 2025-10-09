@@ -112,11 +112,21 @@ func IsValidItemID(id string) bool {
 	return true
 }
 
-func getApiKey() (string, error) {
-	accessToken := os.Getenv("EAGLE_API_KEY") // Get token from environment variable
+// env key precedence:
+// 1: env variable - using `EAGLE_API_KEY`
+// 2: automatically, from $a = irm http://localhost:41595 | .data.preferences.developer.apiToken
+func getApiKey(baseURL string) (string, error) {
+	accessToken := os.Getenv("EAGLE_API_KEY")
+	if accessToken == "" {
+		info, err := ApplicationInfo(baseURL)
+		if err != nil {
+			panic("error retrieving ApplicationInfo: " + err.Error())
+		}
+		accessToken = info.Preferences.Developer.APIToken
+	}
 	if accessToken == "" {
 		return "", &ApiKeyErr{
-			Message: "environment variable `EAGLE_API_KEY` is not set or is empty.",
+			Message: "API key not found. could not retrieve automatically. environment variable `EAGLE_API_KEY` is not set or is empty.",
 		}
 	}
 	return accessToken, nil
@@ -124,7 +134,7 @@ func getApiKey() (string, error) {
 
 // mutates r
 func addTokenAndEncodeQueryParams(r *http.Request) error {
-	key, err := getApiKey()
+	key, err := getApiKey(r.URL.String())
 	if err != nil {
 		return err
 	}

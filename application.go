@@ -11,11 +11,18 @@ import (
 // - [X] /api/application/info
 
 type ApplicationInfoData struct {
-	Version           string `json:"version"`
-	PreReleaseVersion string `json:"preReleaseVersion,omitempty"`
-	BuildVersion      string `json:"buildVersion"`
-	ExecPath          string `json:"execPath"`
-	Platform          string `json:"platform"`
+	Version           string                         `json:"version"`
+	PreReleaseVersion string                         `json:"preReleaseVersion,omitempty"`
+	BuildVersion      string                         `json:"buildVersion"`
+	ExecPath          string                         `json:"execPath"`
+	Platform          string                         `json:"platform"`
+	Preferences       ApplicationInfoDataPreferences `json:"preferences"`
+}
+
+type ApplicationInfoDataPreferences struct {
+	Developer struct {
+		APIToken string `json:"apiToken"`
+	} `json:"developer"`
 }
 
 // GET Get detailed information on the Eagle App currently running. In most cases, this could be used to determine whether certain functions are available on the user's device.
