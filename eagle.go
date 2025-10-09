@@ -134,7 +134,7 @@ func getApiKey(baseURL string) (string, error) {
 
 // mutates r
 func addTokenAndEncodeQueryParams(r *http.Request) error {
-	key, err := getApiKey(r.URL.String())
+	key, err := getApiKey("http://" + r.URL.Host)
 	if err != nil {
 		return err
 	}
