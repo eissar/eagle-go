@@ -118,11 +118,37 @@ func IsValidItemID(id string) bool {
 func getApiKey(baseURL string) (string, error) {
 	accessToken := os.Getenv("EAGLE_API_KEY")
 	if accessToken == "" {
-		info, err := ApplicationInfo(baseURL)
+		url := baseURL + "/api/application/info"
+		resp, err := http.Get(url)
 		if err != nil {
-			panic("error retrieving ApplicationInfo: " + err.Error())
+			return "", fmt.Errorf("error retrieving application info: %w", err)
 		}
-		accessToken = info.Preferences.Developer.APIToken
+		defer resp.Body.Close()
+
+		if resp.StatusCode != 200 {
+			return "", fmt.Errorf("application info returned status %d", resp.StatusCode)
+		}
+
+		var result struct {
+			Status string `json:"status"`
+			Data   struct {
+				Preferences struct {
+					Developer struct {
+						APIToken string `json:"apiToken"`
+					} `json:"developer"`
+				} `json:"preferences"`
+			} `json:"data"`
+		}
+
+		if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+			return "", fmt.Errorf("error decoding application info: %w", err)
+		}
+
+		if result.Status != "success" {
+			return "", fmt.Errorf("application info status was not success: %s", result.Status)
+		}
+
+		accessToken = result.Data.Preferences.Developer.APIToken
 	}
 	if accessToken == "" {
 		return "", &ApiKeyErr{
@@ -134,7 +160,7 @@ func getApiKey(baseURL string) (string, error) {
 
 // mutates r
 func addTokenAndEncodeQueryParams(r *http.Request) error {
-	key, err := getApiKey(r.URL.String())
+	key, err := getApiKey("http://" + r.URL.Host)
 	if err != nil {
 		return err
 	}
